@@ -13,6 +13,6 @@ setup(name='balaitous',
           'scikit-image',
           'torch',
           'torchvision',
-          'lungmask @ git+https://git@github.com/JoHof/lungmask@master',
+          'lungmask @ git+https://git@github.com/JoHof/lungmask@v0.2.4',
       ],
        entry_points ={'console_scripts': ['balaitous = balaitous.cli:cli']})
