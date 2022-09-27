@@ -1,10 +1,13 @@
 from setuptools import setup, find_packages
 
+with open('README.md'), encoding='utf-8') as f:
+  long_description = f.read()
+
 setup(name='balaitous',
       author='Simon Jégou',
       version='1.0',
       description='Codebase to run the Balaitous model',
-      long_description=open('README.md').read(),
+      long_description=long_description,
       packages=find_packages(),
       license ='MIT',
       install_requires=[
