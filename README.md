@@ -6,6 +6,8 @@ Given an input CT scan, Balaitous outputs a probability for COVID disease and a 
 
 It was trained on 2,000 patients from  the public [STOIC database](https://pubs.rsna.org/doi/10.1148/radiol.2021210384) and achieved the best performance on an hold-out validation dataset of 800 patients during qualification phase of the [STOIC-2021 challenge](https://stoic2021.grand-challenge.org/) (see [leaderboard](https://stoic2021.grand-challenge.org/evaluation/quallification-last-submission/leaderboard/)). 
 
+The model can also be used directly for inference on the grand-challenge website at this [link](https://grand-challenge.org/algorithms/logistic-regression/).
+
 
 ## Installation
 
@@ -53,7 +55,7 @@ The processing steps of Balaitous (see `balaitous.py`) are the following :
 - A first feature extractor is applied to get a first vector $X_{full}$
 - The lung mask is applied to the image (only lungs are now visible)
 - A second feature extractor is applied to get a second vector $X_{lung}$
-- For the severe outcome, 2 logistic regressions are applied to [$X_{full}$, age, sex] and [$X_{lung}$, age, sex] and the 2 probabilities are averaged 
+- For the severe outcome, 2 logistic regressions are applied to $X_{full}$ + age + sex and $X_{lung}$ + age + sex and the 2 probabilities are averaged 
 - For the covid outcome, 2 logistic regressions are applied to $X_{full}$ and $X_{lung}$ and the 2 probabilities are averaged 
 
 The first feature extractor is a ViT-L model pretrained on ImageNet-22k using iBOT ([source](https://github.com/bytedance/ibot)) and finetuned for 35 epochs on 165k CT slices (4k patients from 7 public datasets). The second feature extractor is the same ViT-L model without finetuning. Model weights can be found on [Zenodo](https://zenodo.org/record/6547999#.Yn9QjJNBxSA).
