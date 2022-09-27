@@ -1,0 +1,9 @@
+numpy
+pandas
+SimpleITK
+scikit-image
+torch
+torchvision
+scikit-learn
+evalutils
+git+https://github.com/JoHof/lungmask@master
