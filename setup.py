@@ -1,10 +1,14 @@
 from setuptools import setup, find_packages
 
+with open('README.md', 'r', encoding='utf-8') as f:
+    long_description = f.read()
+
 setup(name='balaitous',
       author='Simon Jégou',
       version='1.0',
       description='Codebase to run the Balaitous model',
-      long_description='Codebase to run the Balaitous model, more information at https://github.com/SimJeg/balaitous/blob/master/README.md',
+      long_description=long_description,
+      long_description_content_type="text/markdown",
       packages=find_packages(),
       license ='MIT',
       install_requires=[
@@ -13,6 +17,6 @@ setup(name='balaitous',
           'scikit-image',
           'torch',
           'torchvision',
-          'lungmask @ git+https://git@github.com/JoHof/lungmask@v0.2.4',
+          'lungmask',
       ],
        entry_points ={'console_scripts': ['balaitous = balaitous.cli:cli']})
