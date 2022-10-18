@@ -1,17 +1,15 @@
 # Balaitous
 
-[![PyPI version](https://badge.fury.io/py/balaitous.svg)](https://badge.fury.io/py/balaitous)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/542006397.svg)](https://zenodo.org/badge/latestdoi/542006397)
-
 Balaitous is an updated version of the AI-severity model described in [Lassau et al., 2021](https://doi.org/10.1038/s41467-020-20657-4).
 
 Given an input CT scan, Balaitous outputs a probability for COVID disease and a probability for severe outcome, defined as intubation or death within one month.
 
-It was trained on 2,000 patients from  the public [STOIC database](https://pubs.rsna.org/doi/10.1148/radiol.2021210384) and achieved the best performance on an hold-out validation dataset of 800 patients during qualification phase of the [STOIC-2021 challenge](https://stoic2021.grand-challenge.org/) (see [leaderboard](https://stoic2021.grand-challenge.org/evaluation/quallification-last-submission/leaderboard/)). 
 
-The model can also be used directly for inference on the grand-challenge website at this [link](https://grand-challenge.org/algorithms/logistic-regression/).
+## News 🚀
 
+- October 2022 - The model trained on the private [STOIC database](https://pubs.rsna.org/doi/10.1148/radiol.2021210384) (n=9724) ranked 2nd 🥈 for severity prediction (AUC=81.0% vs 81.5% for 1st place) and 1st 🥇 for COVID diagnosis (AUC=84.5%) on the [final leaderboard](https://stoic2021.grand-challenge.org/evaluation/challenge-2/leaderboard/) (n=1000). Slides from the STOIC webinar can be found in the `assets` directory.
+- September 2022 - The model trained on the public STOIC database is released (v1.0)
+- April 2022 - The model trained on the public STOIC database (n=2000) ranked 1st 🥇 for severity prediction (AUC=80.4%) and 1st 🥇 for COVID diagnosis (AUC=83.2%) on the [qualification leaderboard](https://stoic2021.grand-challenge.org/evaluation/quallification-last-submission/leaderboard/) (n=800).
 
 ## Installation
 
@@ -23,10 +21,10 @@ pip install balaitous
 
 Using the command line interface:
 ```bash
-balaitous --path path/to/image
+balaitous run path/to/image
 ````
 
-or using python: 
+or using python (recommanded for batch predictions): 
 ```python
 from balaitous import Balaitous
 
@@ -39,7 +37,7 @@ The input image must be readable using the `SimpleITK.ReadImage` function (*e.g.
  `PatientAge` and `PatientSex` metadata keys are automatically parsed from the input image. If not available, age (in years, *e.g.* 65) and sex (1 for male, 0 for female) can be optionnaly passed to Balaitous :
 
 ```bash
-balaitous --path /path/to/image --age age --sex sex
+balaitous run /path/to/image --age age --sex sex
 ```
 
 or:
@@ -59,14 +57,14 @@ The processing steps of Balaitous (see `balaitous.py`) are the following :
 - A first feature extractor is applied to get a first vector $X_{full}$
 - The lung mask is applied to the image (only lungs are now visible)
 - A second feature extractor is applied to get a second vector $X_{lung}$
-- For the severe outcome, 2 logistic regressions are applied to $X_{full}$ + age + sex and $X_{lung}$ + age + sex and the 2 probabilities are averaged 
+- For the severe outcome, 2 logistic regressions are applied to [$X_{full}$, age, sex] and [$X_{lung}$, age, sex] and the 2 probabilities are averaged 
 - For the covid outcome, 2 logistic regressions are applied to $X_{full}$ and $X_{lung}$ and the 2 probabilities are averaged 
 
 The first feature extractor is a ViT-L model pretrained on ImageNet-22k using iBOT ([source](https://github.com/bytedance/ibot)) and finetuned for 35 epochs on 165k CT slices (4k patients from 7 public datasets). The second feature extractor is the same ViT-L model without finetuning. Model weights can be found on [Zenodo](https://zenodo.org/record/6547999#.Yn9QjJNBxSA).
 
 Only the 4 logistic regressions were trained on the STOIC database, and only COVID positive patients were used to train the 2 logistic regressions for the prediction of severity. 
 
-*Note : hyper-parameters and feature extractors have been choosen following cross-validation results on the public STOIC database (n=2,000 patients). Using the finetuned iBOT model on the plain image instead of the ImageNet model only brought modest performance gains.* 
+*Note : hyper-parameters and feature extractors have been choosen following cross-validation results on the public STOIC database (n=2000 patients). Using the finetuned iBOT model on the plain image instead of the ImageNet model only brought modest performance gains.* 
 
 It is possible to get intermediate output variables from Balaitous using : 
 
@@ -93,12 +91,14 @@ The ROC-AUC performances (in %) of Balaitous are:
 | Training - $X_{full}$  | 79.01 +- 2.63 | 80.65 +- 2.16  |
 | Training - $X_{lung}$ | 79.00 +- 3.30 | 82.63 +- 1.99  |
 | Training              | 80.36 +- 2.80 | 82.98 +- 2.01  |
-| Validation            | 80.44         | 83.22          |  
+| Qualification LB      | 80.44         | 83.22          |  
+| Final LB              | 79.4°         | -          |  
 
-There were n=2,000 patients in the training dataset (n=1,205 COVID positive) and around n=800 patients in the validation dataset.
+There were n=2000 patients in the training dataset (n=1205 COVID positive), n=800 patients in the Qualification LB dataset, and n=1000 patients in the Final LB dataset.
 
  Performances on the training dataset are computed using a stratified 4x8-fold cross-validation scheme. Following the STOIC-2021 challenge, the AUC for the severity prediction task is computed only among COVID positive patients. 
 
+° performance reported by the organizers during the STOIC webinar
 
 ## Calibration
 
