@@ -1,5 +1,10 @@
 # Balaitous
 
+
+[![PyPI version](https://badge.fury.io/py/balaitous.svg)](https://badge.fury.io/py/balaitous)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/542006397.svg)](https://zenodo.org/badge/latestdoi/542006397)
+
 Balaitous is an updated version of the AI-severity model described in [Lassau et al., 2021](https://doi.org/10.1038/s41467-020-20657-4).
 
 Given an input CT scan, Balaitous outputs a probability for COVID disease and a probability for severe outcome, defined as intubation or death within one month.
