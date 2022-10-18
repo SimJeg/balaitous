@@ -13,7 +13,7 @@ Given an input CT scan, Balaitous outputs a probability for COVID disease and a 
 ## News 🚀
 
 - October 2022 - The model trained on the private [STOIC database](https://pubs.rsna.org/doi/10.1148/radiol.2021210384) (n=9724) ranked 2nd 🥈 for severity prediction (AUC=81.0% vs 81.5% for 1st place) and 1st 🥇 for COVID diagnosis (AUC=84.5%) on the [final leaderboard](https://stoic2021.grand-challenge.org/evaluation/challenge-2/leaderboard/) (n=1000). Slides from the STOIC webinar can be found in the `assets` directory.
-- September 2022 - The model trained on the public STOIC database is released (v1.0)
+- September 2022 - The model trained on the public STOIC database is released (v1.0) and is available for inference on [grand-challenge.org](https://grand-challenge.org/algorithms/logistic-regression/).
 - April 2022 - The model trained on the public STOIC database (n=2000) ranked 1st 🥇 for severity prediction (AUC=80.4%) and 1st 🥇 for COVID diagnosis (AUC=83.2%) on the [qualification leaderboard](https://stoic2021.grand-challenge.org/evaluation/quallification-last-submission/leaderboard/) (n=800).
 
 ## Installation
