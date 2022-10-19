@@ -54,6 +54,8 @@ p_covid, p_severe = model('path/to/image', age=age, sex=sex)
 
 ## Model description
 
+<img src="https://github.com/SimJeg/balaitous/blob/master/assets/diagram.png?raw=true">
+
 The processing steps of Balaitous (see `balaitous.py`) are the following : 
 
 - The scan is resized to a pixel spacing of (1.5mm, 1.5mm, 5mm) and reshaped to a shape of (224, 224, Z)
