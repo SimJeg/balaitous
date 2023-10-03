@@ -26,7 +26,7 @@ pip install balaitous
 
 Using the command line interface:
 ```bash
-balaitous run path/to/image
+balaitous --path path/to/image
 ````
 
 or using python (recommanded for batch predictions): 
@@ -42,7 +42,7 @@ The input image must be readable using the `SimpleITK.ReadImage` function (*e.g.
  `PatientAge` and `PatientSex` metadata keys are automatically parsed from the input image. If not available, age (in years, *e.g.* 65) and sex (1 for male, 0 for female) can be optionnaly passed to Balaitous :
 
 ```bash
-balaitous run /path/to/image --age age --sex sex
+balaitous --path /path/to/image --age age --sex sex
 ```
 
 or:
@@ -51,6 +51,44 @@ p_covid, p_severe = model('path/to/image', age=age, sex=sex)
 ```
 
 *Note: Balaitous runs much faster on GPU : 2-4 sec/sample on a GPU (NVIDIA GTX 1080Ti) compared to 2-4 min/sample on CPU (Intel i7, 8 cores).*
+
+## Example
+
+The following code runs Balaitous on 2 CT scans from the [MosMed database](https://mosmed.ai/en/datasets/covid191110/)
+
+```python
+import requests
+import SimpleITK as sitk
+import matplotlib.pyplot as plt
+from tempfile import NamedTemporaryFile
+
+from balaitous import Balaitous
+
+url1 = "https://zenodo.org/record/8401695/files/covid.nii.gz"
+url2 = "https://zenodo.org/record/8401695/files/no_covid.nii.gz"
+model = Balaitous()
+
+for i, url in enumerate([url1, url2]):
+    with NamedTemporaryFile(suffix=".nii.gz") as f:
+        # Download image
+        f.write(requests.get(url).content)
+
+        # Run inference
+        p_covid, p_severe = model(f.name)
+
+        # Load middle slice
+        image = sitk.ReadImage(f.name)
+        image = sitk.GetArrayFromImage(image)
+        image = image[image.shape[0] // 2][::-1]
+
+        # Display image and probabilities
+        plt.subplot(1, 2, i + 1)
+        plt.imshow(image, cmap="gray")
+        plt.axis("off")
+        plt.title(f"proba covid: {p_covid:.2f}\nproba severe: {p_severe:.2f}")
+
+plt.show()
+```
 
 ## Model description
 
