@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(name='balaitous',
       author='Simon Jégou',
-      version='1.1',
+      version='1.0',
       description='Codebase to run the Balaitous model',
       long_description=long_description,
       long_description_content_type="text/markdown",
